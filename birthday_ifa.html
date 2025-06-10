@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday, Ifa!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans&family=Playfair+Display&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+  :root {
+    --baby-blue: #AEDFF7;
+    --off-white: #F8FBFF;
+    --blush-pink: #F8D7DA;
+  }
+</style>
+
+<style>
+html {
+        scroll-behavior: smooth;
+    }
+    
+    body {
+        font-family: 'Nunito Sans', sans-serif;
+        background-color: var(--off-white);
+        color: #333;
+    }
+    
+    h1, h2, h3, h4 {
+        font-family: 'Playfair Display', serif;
+    }
+    
+    .section {
+        min-height: 100vh;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 1s ease, transform 1s ease;
+    }
+    
+    .section.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    .card {
+        background-color: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    }
+    
+    .btn {
+        background-color: var(--baby-blue);
+        color: #333;
+        padding: 12px 28px;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(174, 223, 247, 0.3);
+    }
+    
+    .btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 15px rgba(174, 223, 247, 0.4);
+    }
+    
+    .cloud-background {
+        background-image: url('assets/images/clouds.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+
+    .cloud-background::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(255, 255, 255, 0.6);
+        z-index: 0;
+    }
+
+    .cloud-background > * {
+        position: relative;
+        z-index: 1;
+    }
+
+    .photo-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+    }
+    
+    .photo-item {
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        opacity: 0;
+        transform: scale(0.95);
+        transition: all 0.5s ease;
+    }
+    
+    .photo-item.visible {
+        opacity: 1;
+        transform: scale(1);
+    }
+    
+    .photo-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: all 0.3s ease;
+    }
+    
+    .photo-caption {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(transparent, rgba(0,0,0,0.7));
+        color: white;
+        padding: 20px;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.3s ease;
+    }
+    
+    .photo-item:hover img {
+        transform: scale(1.05);
+    }
+    
+    .photo-item:hover .photo-caption {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    .love-item {
+        opacity: 0;
+        transform: translateX(-30px);
+        transition: all 0.6s ease;
+    }
+    
+    .love-item.from-right {
+        transform: translateX(30px);
+    }
+    
+    .love-item.visible {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    
+    .pulse {
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+            box-shadow: 0 4px 10px rgba(174, 223, 247, 0.3);
+        }
+        50% {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(174, 223, 247, 0.5);
+        }
+        100% {
+            transform: scale(1);
+            box-shadow: 0 4px 10px rgba(174, 223, 247, 0.3);
+        }
+    }
+
+    .aspect-w-16.aspect-h-9 {
+        position: relative;
+        padding-bottom: 56.25%; /* 16:9 */
+        height: 0;
+        overflow: hidden;
+    }
+
+    .aspect-w-16.aspect-h-9 iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0,0,0,0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.3s ease;
+    }
+    
+    .modal.active {
+        opacity: 1;
+        pointer-events: all;
+    }
+    
+    .modal-content {
+        background-color: white;
+        border-radius: 16px;
+        padding: 40px;
+        max-width: 500px;
+        width: 90%;
+        transform: scale(0.9);
+        transition: all 0.3s ease;
+    }
+    
+    .modal.active .modal-content {
+        transform: scale(1);
+    }
+    
+    .letter-paragraph {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.8s ease;
+        transition-delay: calc(var(--delay) * 0.2s);
+    }
+    
+    .letter-paragraph.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    #coverPage {
+        background: linear-gradient(135deg, var(--baby-blue) 0%, var(--blush-pink) 100%);
+    }
+    
+    #finalPage {
+        background: linear-gradient(135deg, var(--blush-pink) 0%, var(--baby-blue) 100%);
+    }
+    
+    .days-counter {
+        font-size: 3rem;
+        font-weight: bold;
+        color: #333;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+</style>
+<body>
+<div class="cloud-background">
+  <!-- Cover Page -->
+  <section id="coverPage" class="section flex items-center justify-center min-h-screen">
+    <div class="text-center p-8">
+      <h1 class="text-5xl font-bold mb-6 text-black">Happy Birthday, Baby! 💖</h1>
+      <p class="text-xl text-grey mb-8">A little something from me to you...</p>
+      <button id="openButton" class="btn pulse text-lg">Open Here!</button>
+    </div>
+  </section>
+
+
+<!-- Letter Section -->
+<section id="letterSection" class="section py-20 px-4">
+    <div class="max-w-4xl mx-auto">
+        <h2 class="text-4xl font-bold mb-12 text-center">A Letter From Me to You</h2>
+        <div class="flex flex-col md:flex-row gap-8 items-center">
+            <div class="md:w-1/3">
+                <div class="rounded-full overflow-hidden w-64 h-64 mx-auto shadow-lg border-4 border-white flex items-center justify-center">
+                    <img src="assets/images/bungalily.jpg" alt="Photo of us" class="w-full h-full object-cover" />
+                </div>
+            </div>
+            <div class="md:w-2/3 card p-8">
+                <div class="letter-paragraph" style="--delay: 1;">
+                    <p class="mb-4">My Dearest Ifa,</p>
+                </div>
+                <div class="letter-paragraph" style="--delay: 2;">
+                    <p class="mb-4">As you celebrate another trip around the sun, I just want to remind you how incredibly special you are to me. Every moment with you feels like a gift, one I treasure more than words can express.</p>
+                </div>
+                <div class="letter-paragraph" style="--delay: 3;">
+                    <p class="mb-4">Your smile lights up even my darkest days. Your laughter is the melody that stays in my heart. And your kindness? It inspires me to grow, to love, and to be better.</p>
+                </div>
+                <div class="letter-paragraph" style="--delay: 4;">
+                    <p class="mb-4">This birthday marks another beautiful chapter in your life, and I’m beyond grateful to be part of your story. The memories we’ve created together are among the most cherished in my life.</p>
+                </div>
+                <div class="letter-paragraph" style="--delay: 5;">
+                    <p class="mb-4">As you blow out your candles, know that my wish for you is a year as wonderful and radiant as your soul, filled with the same joy, love, and light you so effortlessly bring into the world.</p>
+                </div>
+                <div class="letter-paragraph" style="--delay: 6;">
+                    <p class="mb-4">I love you with all my heart.</p>
+                </div>
+                <div class="letter-paragraph" style="--delay: 7;">
+                    <p>Your beloved husband-to-be,</p>
+                    <p>Irsyad Fadhilah 😚❤️</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Photo Gallery -->
+<section id="photoSection" class="section py-20 px-4 bg-gray-50">
+    <div class="max-w-6xl mx-auto">
+        <h2 class="text-4xl font-bold mb-12 text-center">Photos of You</h2>
+        <div class="photo-grid">
+            <!-- Photo 1 -->
+            <div class="photo-item h-70">
+                <img src="assets/images/firstphototghtr.PNG" alt="Ifa-first-call" class="w-full object-contain rounded-lg bg-white" />
+                <div class="photo-caption">
+                    <h4 class="text-lg font-bold">Our First Photo Together</h4>
+                    <p>March 13, 2025</p>
+                </div>
+            </div>
+            
+            <!-- Photo 2 -->
+            <div class="photo-item h-80">
+                <img src="assets/images/ifaasiomay.jpg" alt="Ifa-siomay" class="w-full object-contain rounded-lg bg-white" />
+                <div class="photo-caption">
+                    <h4 class="text-lg font-bold">You with Siomay Racing</h4>
+                    <p>March 12, 2025</p>
+                </div>
+            </div>
+            
+            <!-- Photo 3 -->
+            <div class="photo-item h-82">
+                <img src="assets/images/ifaamonyong2.jpg" alt="Ifa-disaster" class="w-full object-contain rounded-lg bg-white" />
+                <div class="photo-caption">
+                    <h4 class="text-lg font-bold">Moment before disaster</h4>
+                    <p>April 17, 2025</p>
+                </div>
+            </div>
+            
+            <!-- Photo 4 -->
+            <div class="photo-item h-80">
+                <img src="assets/images/ifaadontol.jpg" alt="Ifa-dontol" class="w-full object-contain rounded-lg bg-white" />
+                <div class="photo-caption">
+                    <h4 class="text-lg font-bold">My Favorite Dontol 🤪</h4>
+                    <p>March 16, 2025</p>
+                </div>
+            </div>
+            
+            <!-- Photo 5 -->
+            <div class="photo-item h-64">
+                <img src="assets/images/ifaachikuro.jpg" alt="Ifa-chikuro" class="w-full object-contain rounded-lg bg-white" />
+                <div class="photo-caption">
+                    <h4 class="text-lg font-bold">You n Your Fav Snack</h4>
+                    <p>May 9, 2025</p>
+                </div>
+            </div>
+            
+            <!-- Photo 6 -->
+            <div class="photo-item h-72">
+                <img src="assets/images/ifaamonyong3.jpg" alt="Ifa-cantik" class="w-full object-contain rounded-lg bg-white" />
+                <div class="photo-caption">
+                    <h4 class="text-lg font-bold">One of My Fav Photos</h4>
+                    <p>March 20, 2025</p>
+                </div>
+            </div>
+
+            <!-- Photo 7 -->
+            <div class="photo-item h-80">
+                <img src="assets/images/fotokita1.jpg" alt="my-birthday" class="w-full object-contain rounded-lg bg-white" />
+                <div class="photo-caption">
+                    <h4 class="text-lg font-bold">Celebrating My Birthday 🥳</h4>
+                    <p>June 10, 2025</p>
+                </div>
+            </div>
+
+            <!-- Photo 8 -->
+            <div class="photo-item h-72">
+                <img src="assets/images/ifaamonyong1.jpg" alt="bad-mood" class="w-full object-contain rounded-lg bg-white" />
+                <div class="photo-caption">
+                    <h4 class="text-lg font-bold">Bad Mood 😾</h4>
+                    <p>May 26, 2025</p>
+                </div>
+            </div>
+
+            <!-- Photo 9 -->
+            <div class="photo-item h-64">
+                <img src="assets/images/fotokita2.jpg" alt="my-birthday-2" class="w-full object-contain rounded-lg bg-white" />
+                <div class="photo-caption">
+                    <h4 class="text-lg font-bold">Favorite Birthday Photo</h4>
+                    <p>June 10, 2025</p>
+                </div>
+            </div>
+
+            <!-- Photo 10 -->
+            <div class="photo-item h-70">
+                <img src="assets/images/ifaamata.jpg" alt="mata-cantik" class="w-full object-contain rounded-lg bg-white" />
+                <div class="photo-caption">
+                    <h4 class="text-lg font-bold">I Love Your Eyes</h4>
+                    <p>April 3, 2025</p>
+                </div>
+            </div>
+
+            <!-- Photo 11 -->
+            <div class="photo-item h-80">
+                <img src="assets/images/hahaha.PNG" alt="ngakak" class="w-full object-contain rounded-lg bg-white" />
+                <div class="photo-caption">
+                    <h4 class="text-lg font-bold">HAHAHAHA</h4>
+                    <p>May 24, 2025</p>
+                </div>
+            </div>
+
+            <!-- Photo 12 -->
+            <div class="photo-item h-70">
+                <img src="assets/images/gembul.PNG" alt="gembul" class="w-full object-contain rounded-lg bg-white" />
+                <div class="photo-caption">
+                    <h4 class="text-lg font-bold">Us with Gemala 🥰</h4>
+                    <p>May 4, 2025</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- What I Love About You -->
+<section id="loveSection" class="section py-20 px-4">
+    <div class="max-w-4xl mx-auto">
+        <h2 class="text-4xl font-bold mb-12 text-center">What I Love About You</h2>
+        <div class="space-y-6">
+            <!-- Item 1 -->
+            <div class="love-item card p-6 flex items-center">
+                <div class="text-4xl mr-6">😊</div>
+                <div>
+                    <h3 class="text-xl font-bold">Your Smile</h3>
+                    <p class="text-gray-600">The way your eyes light up when you smile makes my heart skip a beat every time.</p>
+                </div>
+            </div>
+            
+            <!-- Item 2 -->
+            <div class="love-item from-right card p-6 flex items-center">
+                <div class="text-4xl mr-6">💭</div>
+                <div>
+                    <h3 class="text-xl font-bold">Your Mind</h3>
+                    <p class="text-gray-600">The way you understand the silent battle I'm facing means more than words can say.</p>
+                </div>
+            </div>
+            
+            <!-- Item 3 -->
+            <div class="love-item card p-6 flex items-center">
+                <div class="text-4xl mr-6">❤️</div>
+                <div>
+                    <h3 class="text-xl font-bold">Your Kindness</h3>
+                    <p class="text-gray-600">The way you care for others shows the beautiful heart you have inside.</p>
+                </div>
+            </div>
+            
+            <!-- Item 4 -->
+            <div class="love-item from-right card p-6 flex items-center">
+                <div class="text-4xl mr-6">🎵</div>
+                <div>
+                    <h3 class="text-xl font-bold">Your Voice</h3>
+                    <p class="text-gray-600">Your voice is my favorite sound in the world - it's like music to my ears.</p>
+                </div>
+            </div>
+            
+            <!-- Item 5 -->
+            <div class="love-item card p-6 flex items-center">
+                <div class="text-4xl mr-6">✨</div>
+                <div>
+                    <h3 class="text-xl font-bold">Your Passion</h3>
+                    <p class="text-gray-600">The way you pour your heart into everything you do inspires me every day.</p>
+                </div>
+            </div>
+            
+            <!-- Item 6 -->
+            <div class="love-item from-right card p-6 flex items-center">
+                <div class="text-4xl mr-6">💪🏻</div>
+                <div>
+                    <h3 class="text-xl font-bold">Your Strength</h3>
+                    <p class="text-gray-600">Your resilience in the face of challenges shows how incredibly strong you are.</p>
+                </div>
+            </div>
+            
+            <!-- Item 7 -->
+            <div class="love-item card p-6 flex items-center">
+                <div class="text-4xl mr-6">🧠</div>
+                <div>
+                    <h3 class="text-xl font-bold">Your Intelligence</h3>
+                    <p class="text-gray-600">The way you perceive the world and articulate your thoughts shows just how intelligent you are, it never fails to amaze me.</p>
+                </div>
+            </div>
+            
+            <!-- Item 8 -->
+            <div class="love-item from-right card p-6 flex items-center">
+                <div class="text-4xl mr-6">🤗</div>
+                <div>
+                    <h3 class="text-xl font-bold">Your Hugs</h3>
+                    <p class="text-gray-600">We may not be together physically yet, but I’ve always felt the warmth of your presence.</p>
+                </div>
+            </div>
+            
+            <!-- Item 9 -->
+            <div class="love-item card p-6 flex items-center">
+                <div class="text-4xl mr-6">👁️</div>
+                <div>
+                    <h3 class="text-xl font-bold">Your Eyes</h3>
+                    <p class="text-gray-600">I could get lost in your eyes forever - they reflect the beauty of your soul.</p>
+                </div>
+            </div>
+            
+            <!-- Item 10 -->
+            <div class="love-item from-right card p-6 flex items-center">
+                <div class="text-4xl mr-6">💝</div>
+                <div>
+                    <h3 class="text-xl font-bold">Your Love</h3>
+                    <p class="text-gray-600">The way you love me, unconditionally and completely, makes me the luckiest person alive. Thank you so much for loving me!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Song Dedication -->
+<section id="songSection" class="section py-20 px-4 bg-gray-50">
+    <div class="max-w-4xl mx-auto text-center">
+        <h2 class="text-4xl font-bold mb-12">Songs For You!</h2>
+        <div class="card p-8 max-w-2xl mx-auto">
+            <div class="mb-6">
+                <div class="aspect-w-16 aspect-h-9 w-full rounded-lg overflow-hidden shadow-lg">
+                    <iframe
+                        src="https://www.youtube.com/embed/T28Q4HHXY0s?si=Tp5yvuJcFblyGBTh"
+                        title="Dedicated Song"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen
+                        class="w-full h-full">
+                    </iframe>
+                </div>
+            </div>
+            <h3 class="text-2xl font-bold mb-2">Selfless</h3>
+            <p class="text-gray-600 mb-6">by The Strokes</p>
+            <p class="mb-8">This is the song that brings me to your mind every time it plays. Especially, this video clip.</p>
+        </div>
+
+        <h2 class="text-4xl font-bold mb-12"></h2>
+        <div class="card p-8 max-w-2xl mx-auto">
+            <div class="mb-6">
+                <div class="aspect-w-16 aspect-h-9 w-full rounded-lg overflow-hidden shadow-lg">
+                    <iframe
+                        src="https://www.youtube.com/embed/XjUI_t2IPWY?si=sqlGFH2C9AvDGgU6"
+                        title="Dedicated Song"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen
+                        class="w-full h-full">
+                    </iframe>
+                </div>
+            </div>
+            <h3 class="text-2xl font-bold mb-2">Arungi</h3>
+            <p class="text-gray-600 mb-6">by Romantic Echoes</p>
+            <p class="mb-8">This song always reminds me of you and the beautiful moments we've shared together.</p>
+        </div>
+    </div>
+</section>
+</div>  
+<!-- Final Page -->
+<section id="finalPage" class="section flex items-center justify-center min-h-screen">
+    <div class="text-center p-8 max-w-2xl mx-auto">
+        <h2 class="text-4xl font-bold mb-6 text-black">With All My Love</h2>
+        <p class="text-xl mb-8 text-black">Thank you for being you. I love you endlessly.</p>
+        
+        <div class="card p-8 mb-10">
+            <h3 class="text-2xl font-bold mb-4">Our Journey Together</h3>
+            <div class="mb-6">
+                <p class="text-lg mb-2">We've been together for:</p>
+                <div class="days-counter" id="daysCounter">365</div>
+                <p>beautiful days</p>
+            </div>
+        </div>
+        
+        <button id="surpriseButton" class="btn pulse text-lg">Tap to reveal your surprise 🎁</button>
+    </div>
+</section>
+
+<!-- Surprise Modal -->
+<div id="surpriseModal" class="modal">
+    <div class="modal-content text-center">
+        <h3 class="text-3xl font-bold mb-6">Your Surprise!</h3>
+        <div class="mb-6">
+            <svg class="w-32 h-32 mx-auto" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <rect width="200" height="200" fill="#F8D7DA" rx="20"/>
+                <rect x="40" y="40" width="120" height="120" fill="#AEDFF7" rx="10"/>
+                <text x="100" y="110" font-family="Arial" font-size="40" text-anchor="middle" fill="white">🎁</text>
+            </svg>
+        </div>
+        <p class="text-xl mb-6">I've prepared a birthday present just for you, my pretty little baby!</p>
+        <p class="mb-8">Get ready for the beautiful journey that lies ahead, one we’ll take together, hand in hand.</p>
+        <button id="closeModal" class="btn">I can't wait! ❤️</button>
+    </div>
+</div>
+
+<script>
+    // Navigation
+    document.getElementById('openButton').addEventListener('click', function() {
+        document.getElementById('letterSection').scrollIntoView({ behavior: 'smooth' });
+    });
+    
+    // Scroll animations
+    const sections = document.querySelectorAll('.section');
+    const loveItems = document.querySelectorAll('.love-item');
+    const photoItems = document.querySelectorAll('.photo-item');
+    const letterParagraphs = document.querySelectorAll('.letter-paragraph');
+    
+    // Initialize first section as visible
+    sections[0].classList.add('visible');
+    
+    // Intersection Observer for sections
+    const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.2 });
+    
+    sections.forEach(section => {
+        sectionObserver.observe(section);
+    });
+    
+    // Intersection Observer for love items
+    const loveItemObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    loveItems.forEach(item => {
+        loveItemObserver.observe(item);
+    });
+    
+    // Intersection Observer for photo items
+    const photoItemObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                
+                // Add staggered delay for photo items
+                const index = Array.from(photoItems).indexOf(entry.target);
+                entry.target.style.transitionDelay = `${index * 0.1}s`;
+            }
+        });
+    }, { threshold: 0.2 });
+    
+    photoItems.forEach(item => {
+        photoItemObserver.observe(item);
+    });
+    
+    // Intersection Observer for letter paragraphs
+    const letterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.8 });
+    
+    letterParagraphs.forEach(paragraph => {
+        letterObserver.observe(paragraph);
+    });
+    
+    // Modal functionality
+    const modal = document.getElementById('surpriseModal');
+    const surpriseButton = document.getElementById('surpriseButton');
+    const closeModal = document.getElementById('closeModal');
+    
+    surpriseButton.addEventListener('click', function() {
+        modal.classList.add('active');
+    });
+    
+    closeModal.addEventListener('click', function() {
+        modal.classList.remove('active');
+    });
+    
+    // Days counter calculation
+    function updateDaysCounter() {
+        // Replace with actual start date
+        const startDate = new Date('2025-04-20');
+        const today = new Date();
+        const diffTime = Math.abs(today - startDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        
+        document.getElementById('daysCounter').textContent = diffDays;
+    }
+    
+    updateDaysCounter();
+</script>
+</body>
+</html>
